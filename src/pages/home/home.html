@@ -6,13 +6,21 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding-top>
   <ion-list>
-    <ion-item *ngFor="let dir of dirList" (click)="openInternalDir(dir.fullPath)">
-      <ion-avatar item-start>
-        <ion-icon name="folder"></ion-icon>
-      </ion-avatar>
-      <h2>{{dir.name}}</h2>
-    </ion-item>
+    <div *ngFor="let dir of dirList">
+      <ion-item *ngIf="dir.isDirectory" (click)="openInternalDir(dir)">
+        <ion-avatar item-start>
+          <ion-icon [name]="dir.icon"></ion-icon>
+        </ion-avatar>
+        <h2>{{dir.name}}</h2>
+      </ion-item>
+      <ion-item *ngIf="!dir.isDirectory" (click)="fileService.openFile(dir.fullPath)">
+        <ion-avatar item-start>
+          <ion-icon [name]="dir.icon"></ion-icon>
+        </ion-avatar>
+        <h2>{{dir.name}}</h2>
+      </ion-item>
+    </div>
   </ion-list>
 </ion-content>

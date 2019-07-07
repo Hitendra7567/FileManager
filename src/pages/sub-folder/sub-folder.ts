@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
+import { FileServiceProvider } from '../../providers/file-service/file-service';
 
 /**
  * Generated class for the SubFolderPage page.
@@ -16,30 +18,43 @@ import { File } from '@ionic-native/file';
 })
 export class SubFolderPage {
   dirList: any = [];
-  path: any;
+  dir: any;
+  name: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public file: File
+    public file: File,
+    public fileService: FileServiceProvider
   ) {
-    this.path = this.navParams.get("path");
-    console.log("Path =>", this.path);
+    this.dir = this.navParams.get("data");
+    this.name = this.dir.name
+    console.log("dir =>", this.dir);
     //This is for removing '/' from filePath
     // this.path.substring(1)
-    this.file.listDir(this.file.externalRootDirectory, this.path.substring(1))
+    this.file.listDir(this.file.externalRootDirectory, this.dir.fullPath.substring(1))
       .then((list) => {
-        this.dirList = list;
-        console.log("Sub Directory Lsit =>", this.dirList);
+        list.forEach((element: any) => {
+          if (element.isDirectory) {
+            element['icon'] = "folder";
+          } else {
+            if (element.name.includes("jpg")) {
+              element['icon'] = "images";
+            } else if (element.name.includes("mp3")) {
+              element['icon'] = "musical-note";
+            } else if (element.name.includes("mp4")) {
+              element['icon'] = "videocam";
+            } else {
+              element['icon'] = "document";
+            }
+          }
+          this.dirList.push(element)
+        })
       });
   }
 
-  openInternalDir(path) {
-    this.navCtrl.push("SubFolderPage", { path: path });
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SubFolderPage');
+  openInternalDir(dir) {
+    this.navCtrl.push("SubFolderPage", { data: dir });
   }
 
 }

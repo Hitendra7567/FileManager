@@ -1,8 +1,19 @@
 ion-icon {
-    font-size: 30px;
-    color: #2596ff;
+  font-size: 30px;
+  color: #2596ff;
 }
 
-.item-md ion-avatar[item-left], .item-md ion-thumbnail[item-left], .item-md ion-avatar[item-start], .item-md ion-thumbnail[item-start]{
-    margin: 0;
+.item-md ion-avatar[item-left],
+.item-md ion-thumbnail[item-left],
+.item-md ion-avatar[item-start],
+.item-md ion-thumbnail[item-start] {
+  margin: 0;
+}
+
+.list-md .item-block .item-inner {
+  border-bottom: none !important;
+}
+
+.label-md {
+  margin: 10px 8px 13px 0 !important;
 }
