@@ -32,8 +32,14 @@ export class SubFolderPage {
     console.log("dir =>", this.dir);
     //This is for removing '/' from filePath
     // this.path.substring(1)
+    this.fileService.getRootDirectory();
     this.file.listDir(this.file.externalRootDirectory, this.dir.fullPath.substring(1))
       .then((list) => {
+        // list.forEach((element: any) => {
+        //   if (element.isDirectory) {
+        //     this.array.push(element)
+        //   }
+        // });
         list.forEach((element: any) => {
           if (element.isDirectory) {
             element['icon'] = "folder";

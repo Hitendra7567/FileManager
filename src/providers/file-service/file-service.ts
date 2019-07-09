@@ -11,10 +11,58 @@ import { File } from '@ionic-native/file';
 @Injectable()
 export class FileServiceProvider {
 
+  array: any = [];
+  image: any = [];
+  music: any = [];
+  video: any = [];
+  doc: any = [];
+  other: any = [];
+
   constructor(
     public fileOpener: FileOpener,
     public file: File
   ) {
+  }
+
+
+  async getRootDirectory() {
+    await this.file.listDir(this.file.externalRootDirectory, '')
+      .then(async (list) => {
+        this.array = list;
+        for (let i = 0; i < this.array.length; i++) {
+          if (this.array[i].isDirectory) {
+            await this.file.listDir(this.file.externalRootDirectory, this.array[i].fullPath.substring(1))
+              .then(async (interList) => {
+                for (let j = 0; j < interList.length; j++) {
+                  await this.array.push(interList[j]);
+                }
+                console.log("List Length =>", this.array.length);
+              }).catch(error => {
+                console.log("Error in File =>", error);
+              });
+          }
+        }
+        console.log("This array", this.array);
+      });
+    console.log("Array =>", this.array)
+    this.getFilterFile(this.array);
+  }
+
+  async getFilterFile(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].name.includes(".jpg")) {
+        this.image.push(arr[i]);
+      } else if (arr[i].name.includes(".mp3")) {
+        this.music.push(arr[i]);
+      } else if (arr[i].name.includes(".mp4")) {
+        this.video.push(arr[i]);
+      } else if (arr[i].name.includes(".pdf") || arr[i].name.includes(".doc")) {
+        this.doc.push(arr[i]);
+      } else {
+        this.other.push(arr[i]);
+      }
+    }
+    console.log("Lenght of respective Image", this.image, "Music", this.music, " Video", this.video, " Doc ", this.doc, " Other =>", this.other);
   }
 
   openFile(path) {
